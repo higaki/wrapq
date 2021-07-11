@@ -10,7 +10,6 @@ add_executable(test_sample
   pop.cpp
 )
 target_link_libraries(test_sample
-  sample
   GTest::GTest
   GTest::Main
 )

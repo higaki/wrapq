@@ -7,19 +7,20 @@
 #undef  private
 
 #include "stub.h"
+#include "hook.h"
 
 using namespace std;
 
 class EmptyTest: public ::testing::Test {
 protected:
-    Sample* target;
+    Sample<overflow_hook>* target;
 
     virtual void SetUp() {
-	target = Sample::getInstance();
+	target = Sample<overflow_hook>::getInstance();
     }
 
     virtual void TearDown() {
-	Sample::destroy();
+	Sample<overflow_hook>::destroy();
 	target = nullptr;
     }
 };
@@ -29,14 +30,14 @@ TEST_F(EmptyTest, empty) {
 }
 
 TEST_F(EmptyTest, once) {
-    Stub s;
+    Stub s(1);
     target->push(&s);
 
     EXPECT_FALSE(target->empty());
 }
 
 TEST_F(EmptyTest, twice) {
-    Stub s, t;
+    Stub s(1), t(2);
     target->push(&s)->push(&t);
 
     EXPECT_FALSE(target->empty());

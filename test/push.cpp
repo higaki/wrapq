@@ -7,43 +7,44 @@
 #undef  private
 
 #include "stub.h"
+#include "hook.h"
 
 using namespace std;
 
 class PushTest: public ::testing::Test {
 protected:
-    Sample* target;
+    Sample<overflow_hook>* target;
 
     virtual void SetUp() {
-	target = Sample::getInstance();
+	target = Sample<overflow_hook>::getInstance();
     }
 
     virtual void TearDown() {
-	Sample::destroy();
+	Sample<overflow_hook>::destroy();
 	target = nullptr;
     }
 };
 
 TEST_F(PushTest, once) {
-    Stub s;
+    Stub s(1);
     EXPECT_EQ(target, target->push(&s));
     EXPECT_EQ(1,      target->size());
 }
 
 TEST_F(PushTest, twice) {
-    Stub s, t;
+    Stub s(1), t(2);
     EXPECT_EQ(target, target->push(&s)->push(&t));
     EXPECT_EQ(2,      target->size());
 }
 
 TEST_F(PushTest, thrice) {
-    Stub s, t, u;
+    Stub s(1), t(2), u(3);
     EXPECT_EQ(target, target->push(&s)->push(&t)->push(&u));
     EXPECT_EQ(3,      target->size());
 }
 
 TEST_F(PushTest, over) {
-    Stub s, t, u, v;
+    Stub s(1), t(2), u(3), v(4);
     EXPECT_EQ(target, target->push(&s)->push(&t)->push(&u)->push(&v));
     EXPECT_EQ(3,      target->size());
     EXPECT_EQ(&t,     target->pop());
@@ -52,7 +53,7 @@ TEST_F(PushTest, over) {
 }
 
 TEST_F(PushTest, same) {
-    Stub s, t, u;
+    Stub s(1), t(2), u(3);
     EXPECT_EQ(target, target->push(&s)->push(&t));
     EXPECT_EQ(2,      target->size());
     EXPECT_EQ(target, target->push(&t)->push(&s));
@@ -62,4 +63,10 @@ TEST_F(PushTest, same) {
     EXPECT_EQ(&s,     target->pop());
     EXPECT_EQ(&t,     target->pop());
     EXPECT_EQ(&u,     target->pop());
+}
+
+TEST_F(PushTest, flush) {
+    Stub s(1), t(2), u(3), v(4);
+    target->push(&s)->push(&t)->push(&u)->push(&v);
+    target->push(&s)->push(&t)->push(&u)->push(&v);
 }
