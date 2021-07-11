@@ -9,18 +9,20 @@
 #include "stub.h"
 #include "hook.h"
 
+typedef Sample<Stub*, overflow_hook> SAMPLE;
+
 using namespace std;
 
 class EmptyTest: public ::testing::Test {
 protected:
-    Sample<overflow_hook>* target;
+    SAMPLE* target;
 
     virtual void SetUp() {
-	target = Sample<overflow_hook>::getInstance();
+	target = SAMPLE::getInstance();
     }
 
     virtual void TearDown() {
-	Sample<overflow_hook>::destroy();
+	SAMPLE::destroy();
 	target = nullptr;
     }
 };

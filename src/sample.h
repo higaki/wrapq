@@ -1,16 +1,14 @@
 #pragma once
 #include <queue>
 
-class Stub;
-
-template <class T>
+template <class T, class F>
 class Sample {
 private:
-    static Sample*    m_sample;
-    static size_t     m_max_size;
+    static Sample* m_sample;
+    static size_t  m_max_size;
 
-    std::deque<Stub*> m_queue;
-    T                 m_hook;
+    std::deque<T> m_queue;
+    F             m_hook;
 
     Sample() {}
     ~Sample() {}
@@ -34,19 +32,19 @@ public:
     size_t max_size() const {return m_max_size;}
     void   clear()          {       m_queue.clear();}
 
-    Sample* push(Stub* stub) {
-	if (m_queue.end() != find(m_queue.begin(), m_queue.end(), stub))
+    Sample* push(T item) {
+	if (m_queue.end() != find(m_queue.begin(), m_queue.end(), item))
 	    return this;		// already
 	while (m_max_size <= size())
 	    m_hook(pop());
-	m_queue.push_back(stub);
+	m_queue.push_back(item);
 	return this;
     }
 
-    Stub* pop() {
+    T pop() {
 	if (empty())
 	    return nullptr;
-	Stub* s = m_queue.front();
+	T s = m_queue.front();
 	m_queue.pop_front();
 	return s;
     }

@@ -8,10 +8,10 @@
 
 #include "hook.h"
 
+typedef Sample<Stub*, overflow_hook> SAMPLE;
+
 using namespace std;
 
 TEST(MaxSizeTest, max_size) {
-    EXPECT_EQ(
-	Sample<overflow_hook>::m_max_size,
-	Sample<overflow_hook>::getInstance()->max_size());
+    EXPECT_EQ(SAMPLE::m_max_size, SAMPLE::getInstance()->max_size());
 }
