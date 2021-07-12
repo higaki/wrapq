@@ -20,23 +20,30 @@ ostream& operator<<(ostream& out, const Stub& s) {
     return out;
 }
 
-TEST(SingletonTest, none) {
+class SingletonTest: public ::testing::Test {
+protected:
+    virtual void SetUp() {
+	SAMPLE::destroy();
+    }
+};
+
+TEST_F(SingletonTest, none) {
     EXPECT_EQ(nullptr, SAMPLE::m_sample);
 }
 
-TEST(SingletonTest, get) {
+TEST_F(SingletonTest, get) {
     auto actual = SAMPLE::getInstance();
     EXPECT_NE(nullptr,          actual);
     EXPECT_EQ(SAMPLE::m_sample, actual);
 }
 
-TEST(SingletonTest, same) {
+TEST_F(SingletonTest, same) {
     auto s0 = SAMPLE::getInstance();
     auto s1 = SAMPLE::getInstance();
     EXPECT_EQ(s0, s1);
 }
 
-TEST(SingletonTest, destroy) {
+TEST_F(SingletonTest, destroy) {
     auto actual = SAMPLE::getInstance();
     ASSERT_NE(nullptr,          actual);
     ASSERT_EQ(SAMPLE::m_sample, actual);
