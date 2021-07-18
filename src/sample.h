@@ -43,7 +43,7 @@ public:
 
     T pop() {
 	if (empty())
-	    return nullptr;
+	    return T();
 	T s = m_queue.front();
 	m_queue.pop_front();
 	return s;
