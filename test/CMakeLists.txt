@@ -8,6 +8,7 @@ add_executable(test_sample
   size.cpp
   push.cpp
   pop.cpp
+  erase.cpp
 )
 target_link_libraries(test_sample
   GTest::GTest

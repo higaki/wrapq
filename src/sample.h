@@ -48,4 +48,14 @@ public:
 	m_queue.pop_front();
 	return s;
     }
+
+    T erase(T deletion) {
+	typename std::deque<T>::iterator found =
+	    find(m_queue.begin(), m_queue.end(), deletion);
+	if (found == m_queue.end())
+	    return T();
+	m_hook(*found);
+	m_queue.erase(found);
+	return deletion;
+    }
 };
